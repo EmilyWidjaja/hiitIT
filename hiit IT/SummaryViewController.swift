@@ -29,14 +29,6 @@ class SummaryViewController: UIViewController {
         //loads in summary mode
         loadSummaryMode()
         
-        //to load edit screen straight from home screen
-        /*if mode == "summary" {
-            setsLabel.isUserInteractionEnabled = false
-            exercisesLabel.isUserInteractionEnabled = false
-            exerciseDurationLabel.isUserInteractionEnabled = false
-            restDurationLabel.isUserInteractionEnabled = false
-            setRestDurationLabel.isUserInteractionEnabled = false
-        }*/
         
     
     }
@@ -113,6 +105,7 @@ class SummaryViewController: UIViewController {
         
     }
     
+    
     func saveValidInput() {
         let sets = Int(setsLabel.text!)
         workoutToLoad?.sets = sets!
@@ -120,14 +113,6 @@ class SummaryViewController: UIViewController {
         workoutToLoad?.exerciseDuration = Int(exerciseDurationLabel.text!)
         workoutToLoad?.setRestDuration = Int(setRestDurationLabel.text!)
         workoutToLoad?.exerciseRestDuration = Int(restDurationLabel.text!)
-        
-        print("\(workoutToLoad?.sets!)")
-        print(workoutToLoad?.exercises!)
-        print(workoutToLoad?.exerciseDuration!)
-        
-        print("Pi")
-        print(workoutToLoad?.setRestDuration!)
-        print(workoutToLoad?.exerciseRestDuration!)
         dismiss(animated: true) /*({ [weak self] in
             if let vc = self?.storyboard?.instantiateViewController(identifier: "Home") as? ViewController {
                 //add saveworkout method
