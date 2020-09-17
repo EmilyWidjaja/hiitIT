@@ -8,14 +8,19 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, tableDelegate {
     
     @IBOutlet var tableView: UITableView!
     
     let routineModel = RoutinesModel()
     var workoutArray = [Routines]()
     var newWorkout: Routines?
-    
+    var mode = "add" {
+        didSet {
+            print(mode)
+        }
+    }
+    var lastTapped: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,21 +33,40 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         workoutArray = routineModel.loadData()
         let templateWorkout = routineModel.templateWorkout()
         workoutArray.append(templateWorkout)
+    }
+    
+    //MARK: -Create new Workout Method
+    //when + button is tapped
+    @IBAction func addNewWorkout(_ sender: Any) {
+        mode = "add"
+        if let controller = storyboard?.instantiateViewController(identifier: "Summary") as? SummaryViewController {
+            let workoutToLoad = routineModel.templateWorkout() //loads template to be filled in?
+            controller.mode = "edit"
+            controller.workoutToLoad = workoutToLoad
+            controller.delegate = self
+            present(controller, animated: true)
+        }
         
     }
     
     
-    //MARK: -Edit methods
+    //MARK: -Information passed back from edit screen methods
     
-    func newWorkoutAdded() {
-        guard let workoutToAdd = newWorkout else {
-            print("no new workout!")
-            return
+    func workoutEdited(newWorkout: Routines) {
+        //let wrongRoutine = Routines(routineName: "wrong", sets: 1, exercises: 1, exerciseDuration: 1, exerciseRestDuration: 1, setRestDuration: 1)
+        
+        if mode == "edit" {
+            workoutArray[lastTapped!] = newWorkout
+            print(workoutArray)
+            tableView.reloadData()
         }
-        let wrongRoutine = Routines(routineName: "wrong", sets: 1, exercises: 1, exerciseDuration: 1, exerciseRestDuration: 1, setRestDuration: 1)
-        workoutArray.append(newWorkout ?? wrongRoutine)
-        print(workoutArray)
-        tableView.reloadData()
+        if mode == "add" {
+            print(workoutArray.count)
+            workoutArray.append(newWorkout)
+            print(workoutArray.count)
+            tableView.reloadData()
+        }
+        dismiss(animated: true)
     }
     
     
@@ -58,18 +82,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
+    //loads summaryVC when tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let controller = storyboard?.instantiateViewController(withIdentifier: "Summary") as? SummaryViewController {
             
             let routineToLoad = workoutArray[indexPath.row]
+            lastTapped = indexPath.row
             
             controller.workoutToLoad = routineToLoad
             controller.mode = "summary"
+            controller.delegate = self //TODO: refactor this code so only declared as delegate once
+            mode = "edit"   //can potentially edit
             //TODO: Implement for multiple sets and different hiit types
             present(controller, animated: true)
         }
     }
 
 
+}
+
+protocol tableDelegate {
+    func workoutEdited(newWorkout: Routines)
 }
 

@@ -11,6 +11,7 @@ import UIKit
 class SummaryViewController: UIViewController {
     
     @IBOutlet var workoutName: UILabel!
+    @IBOutlet weak var workoutNameTextField: UITextField!
     @IBOutlet weak var setsLabel: UITextField!
     @IBOutlet weak var exercisesLabel: UITextField!
     @IBOutlet weak var exerciseDurationLabel: UITextField!
@@ -22,12 +23,22 @@ class SummaryViewController: UIViewController {
     
     var workoutToLoad: Routines?    //refactor so selected workout uses workout To Load
     var mode = "summary"
+    var workoutToSend: Routines?
+    var delegate: tableDelegate!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //loads in summary mode
-        loadSummaryMode()
+        if mode == "summary" {
+            loadSummaryMode()
+        } else if mode == "edit" {
+            loadEditMode()
+        } else {
+            let message = "Something's gone wrong!"
+            let ac = UIAlertController(title: "Error!", message: message, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Done", style: .cancel))
+            present(ac, animated: true)
+        }
         
         
     
@@ -58,18 +69,17 @@ class SummaryViewController: UIViewController {
         }
         //if in edit mode switch to summary & save new routine (dismiss screen)
         if mode == "edit" {
-            //loadSummaryMode()
             checkValidInput()
-            saveValidInput()
+            saveEditedInput()
         }
     }
     
     func loadSummaryMode() {
         mode = "summary"
-        modeswitch()
         
         if setsLabel.isUserInteractionEnabled != false {
-            print("Error! modeswitch incorrect.") }
+            modeswitch()
+        }
         workoutName.text = workoutToLoad?.routineName
         setsLabel.text = "\(workoutToLoad?.sets! ?? 0)"
         exercisesLabel.text = "\(workoutToLoad?.exercises! ?? 0)"
@@ -77,6 +87,10 @@ class SummaryViewController: UIViewController {
         restDurationLabel.text =  "\(workoutToLoad?.exerciseRestDuration! ?? 0)s"
         setRestDurationLabel.text = "\(workoutToLoad?.setRestDuration! ?? 0)s"
         
+        
+        workoutNameTextField.isHidden = true
+        workoutNameTextField.isUserInteractionEnabled = false
+        workoutName.isHidden = false
         startButtonLabel.isHidden = false
         startButtonLabel.isUserInteractionEnabled = true
         toggleButtonLabel.setTitle("Edit", for: .normal)
@@ -86,17 +100,22 @@ class SummaryViewController: UIViewController {
         mode = "edit"
 
         //makes buttons interactive
-        modeswitch()
         if setsLabel.isUserInteractionEnabled != true {
-            print("Error! modeswitch incorrect.")
+            modeswitch()
         }
         //slightly changes description
+        setsLabel.text = "\(workoutToLoad?.sets! ?? 0)"
+        exercisesLabel.text = "\(workoutToLoad?.exercises! ?? 0)"
         exerciseDurationLabel.text = "\(workoutToLoad?.exerciseDuration! ?? 0)"
         restDurationLabel.text =  "\(workoutToLoad?.exerciseRestDuration! ?? 0)"
         setRestDurationLabel.text = "\(workoutToLoad?.setRestDuration! ?? 0)"
 
         startButtonLabel.isHidden = true
         startButtonLabel.isUserInteractionEnabled = false
+        workoutName.isHidden = true
+        workoutNameTextField.isHidden = false
+        workoutNameTextField.placeholder = "Routine Name"
+        workoutNameTextField.isUserInteractionEnabled = true
         toggleButtonLabel.setTitle("Done", for: .normal)
     }
     
@@ -106,23 +125,15 @@ class SummaryViewController: UIViewController {
     }
     
     
-    func saveValidInput() {
+    func saveEditedInput() {
         let sets = Int(setsLabel.text!)
+        workoutToLoad?.routineName = workoutNameTextField.text ?? "Workout" //sets default routine name in case one has not been specified
         workoutToLoad?.sets = sets!
         workoutToLoad?.exercises = Int(exercisesLabel.text!)
         workoutToLoad?.exerciseDuration = Int(exerciseDurationLabel.text!)
         workoutToLoad?.setRestDuration = Int(setRestDurationLabel.text!)
         workoutToLoad?.exerciseRestDuration = Int(restDurationLabel.text!)
-        dismiss(animated: true) /*({ [weak self] in
-            if let vc = self?.storyboard?.instantiateViewController(identifier: "Home") as? ViewController {
-                //add saveworkout method
-                vc.newWorkout = self?.workoutToLoad!
-                vc.newWorkoutAdded()
-            }
-         }*/
-        let homeViewController = ViewController()
-        homeViewController.newWorkout = workoutToLoad
-        navigationController?.pushViewController(homeViewController, animated: true)
+        delegate?.workoutEdited(newWorkout: workoutToLoad!)
     }
     
     
