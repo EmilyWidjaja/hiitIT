@@ -15,11 +15,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let routineModel = RoutinesModel()
     var workoutArray = [Routines]()
     var newWorkout: Routines?
-    var mode = "add" {
-        didSet {
-            print(mode)
-        }
-    }
+    var mode = "add"
     var lastTapped: Int?
 
     override func viewDidLoad() {
@@ -66,6 +62,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print(workoutArray.count)
             tableView.reloadData()
         }
+        routineModel.save()
         dismiss(animated: true)
     }
     
