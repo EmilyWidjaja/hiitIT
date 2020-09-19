@@ -17,6 +17,8 @@
 		BA41133624AE086300403B54 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA41133424AE086300403B54 /* Main.storyboard */; };
 		BA41133824AE086400403B54 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BA41133724AE086400403B54 /* Assets.xcassets */; };
 		BA41133B24AE086500403B54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BA41133924AE086500403B54 /* LaunchScreen.storyboard */; };
+		BAB530CB25161FFD00281365 /* highBeep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAB530C925161FFD00281365 /* highBeep.mp3 */; };
+		BAB530CC25161FFD00281365 /* lowBeep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAB530CA25161FFD00281365 /* lowBeep.mp3 */; };
 		BAD0FDFE24AE31BE00D2115F /* SummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD0FDFD24AE31BE00D2115F /* SummaryViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +35,8 @@
 		BA41133724AE086400403B54 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BA41133A24AE086500403B54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BA41133C24AE086500403B54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BAB530C925161FFD00281365 /* highBeep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = highBeep.mp3; sourceTree = "<group>"; };
+		BAB530CA25161FFD00281365 /* lowBeep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = lowBeep.mp3; sourceTree = "<group>"; };
 		BAD0FDFD24AE31BE00D2115F /* SummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +80,8 @@
 				BA41133924AE086500403B54 /* LaunchScreen.storyboard */,
 				BA41133C24AE086500403B54 /* Info.plist */,
 				BA0C65EF2508E23A00E5B87B /* RoutinesModel.swift */,
+				BAB530C925161FFD00281365 /* highBeep.mp3 */,
+				BAB530CA25161FFD00281365 /* lowBeep.mp3 */,
 				BA0C65F12508E25600E5B87B /* Routines.swift */,
 				BA0C65F32508E28D00E5B87B /* Extensions.swift */,
 			);
@@ -140,8 +146,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BAB530CC25161FFD00281365 /* lowBeep.mp3 in Resources */,
 				BA41133B24AE086500403B54 /* LaunchScreen.storyboard in Resources */,
 				BA41133824AE086400403B54 /* Assets.xcassets in Resources */,
+				BAB530CB25161FFD00281365 /* highBeep.mp3 in Resources */,
 				BA41133624AE086300403B54 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class TimerViewController: UIViewController {
     
@@ -81,32 +82,59 @@ class TimerViewController: UIViewController {
     //timer function to fire timer & decide next timer
     @objc func fireTimer() {
         timeLeft -= 1
+        
+        if timeLeft <= 2 {
+            playSound(fileName: "lowBeep.mp3")
+        }
+        
         if timeLeft == 0 {//2nd exercise segment not activating
             timer?.invalidate()
+            playSound(fileName: "highBeep.mp3")
             print("timer invalidated")
             
             //decides next step
-            switch segment {
-            case "Ex":
-                //add check for last exercise before starting timer
-                if currentExercise == numberOfExercises {
-                    check()
-                } else {
-                    segment = "Rest"
-                    setUpTimer(segment: segment)
-                }
-            case "Rest":
-                check()
-            case "Set Rest":
-                segment = "Ex"
-                setUpTimer(segment: segment)
-            default:
-                print("Error! None of the cases are found.")
+            decideNextTimer()
+        }
+    }
+    //MARK: - BUG
+    //first beep throws [aqsrv] AQServer.cpp:68:APIResult: Exception caught in AudioQueueInternalNotifyRunning - error -66671
+    var soundEffect: AVAudioPlayer!
+    func playSound(fileName: String) {
+        if let path = Bundle.main.path(forResource: fileName, ofType: nil) {
+            let url = URL(fileURLWithPath: path)
+            do {
+                soundEffect = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+                soundEffect?.play()
+            } catch {
+                print("file could not be loaded.")
             }
+        } else {
+            print("file not found.")
         }
     }
     
-    func check() {
+    func decideNextTimer() {
+        switch segment {
+        case "Ex":
+            //add check for last exercise before starting timer
+            if currentExercise == numberOfExercises {
+                checkFinished()
+            } else {
+                segment = "Rest"
+                exerciseLabel.text = "Rest"
+                setUpTimer(segment: segment)
+            }
+        case "Rest":
+            checkFinished()
+        case "Set Rest":
+            segment = "Ex"
+            setUpTimer(segment: segment)
+        default:
+            print("Error! None of the cases are found.")
+        }
+    }
+    
+    func checkFinished() {
         if currentExercise >= numberOfExercises! {
             if currentSet >= numberOfSets! {
                 //finished routine
@@ -132,10 +160,12 @@ class TimerViewController: UIViewController {
     //MARK: Routine finished
     func finish() {
         let ac = UIAlertController(title: "Exercise Complete!", message: "Congratulations!", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "Done", style: .cancel, handler: nil))
+        let action = UIAlertAction(title: "Done", style: .cancel) { [weak self] action in
+            self?.dismiss(animated: true) //goes back to summary view controller
+        }
+        ac.addAction(action)
         present(ac, animated: true)
     }
-    
 
 }
 
