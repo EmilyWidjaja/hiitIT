@@ -26,9 +26,38 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.rowHeight = 100.0
         
         //generates/retrieves workouts that should be in there. TODO: Add memory function
-        workoutArray = routineModel.loadData()
+        //using NSCODING: workoutArray = routineModel.loadData()
+
+        //load method
+        let defaults = UserDefaults.standard
+
+        if let savedRoutines = defaults.object(forKey: "routines") as? Data {
+            let jsonDecoder = JSONDecoder()
+
+            do {
+                workoutArray = try jsonDecoder.decode([Routines].self, from: savedRoutines)
+            } catch {
+                print("Failed to load routines")
+            }
+        }
+        
+        
+        
         let templateWorkout = routineModel.templateWorkout()
         workoutArray.append(templateWorkout)
+    }
+    
+    //MARK: - SAVE Methods
+    //using Codable
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(workoutArray) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "routines")
+            print("Routine saved!")
+        } else {
+            print("Failed to save routines.")
+        }
     }
     
     //MARK: -Create new Workout Method
@@ -62,7 +91,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print(workoutArray.count)
             tableView.reloadData()
         }
-        routineModel.save()
+        save()
         dismiss(animated: true)
     }
     
@@ -95,6 +124,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
+    
 
 }
 

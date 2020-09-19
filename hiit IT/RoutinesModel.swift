@@ -11,7 +11,9 @@ import Foundation
 class RoutinesModel {
     var routines = [Routines]()
     
-    func save() {
+    
+    //uses NSCoding
+    /*func save() {
         if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: routines, requiringSecureCoding: false) {
             let defaults = UserDefaults.standard
             defaults.set(savedData, forKey: "routines")
@@ -30,7 +32,7 @@ class RoutinesModel {
             routines = [Routines]()
         }
         return routines
-    }
+    } */
     
     func templateWorkout() -> Routines {
         let templateWorkout = Routines(routineName: "Abs HIIT", sets: 2, exercises: 2, exerciseDuration: 5, exerciseRestDuration: 3, setRestDuration: 4)

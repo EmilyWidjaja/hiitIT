@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Routines: NSObject, NSCoding {
+class Routines: NSObject, Codable {
     
     var routineName = ""
     var sets:Int?
@@ -29,7 +29,7 @@ class Routines: NSObject, NSCoding {
     }
     
     //read from disk
-    required init?(coder aDecoder: NSCoder) {
+    /*required init?(coder aDecoder: NSCoder) {
         routineName = aDecoder.decodeObject(forKey: "routineName") as? String ?? ""
         sets = aDecoder.decodeObject(forKey: "sets") as? Int ?? 0
         exercises = aDecoder.decodeObject(forKey: "exercises") as? Int ?? 0
@@ -45,7 +45,7 @@ class Routines: NSObject, NSCoding {
         aCoder.encode(exerciseDuration, forKey: "exerciseDuration")
         aCoder.encode(exerciseRestDuration, forKey: "exerciseRestDuration")
         aCoder.encode(setRestDuration, forKey: "setRestDuration")
-    }
+    }*/
     
     //MARK: - Builds set and routines
     //assumes a basic exercise, TODO: Allow for more complex variations
