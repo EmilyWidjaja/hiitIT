@@ -24,11 +24,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 100.0
-        
-        //generates/retrieves workouts that should be in there. TODO: Add memory function
-        //using NSCODING: workoutArray = routineModel.loadData()
 
-        //load method
+        //load method TODO: USE GCD to put on back
         let defaults = UserDefaults.standard
 
         if let savedRoutines = defaults.object(forKey: "routines") as? Data {
@@ -38,13 +35,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 workoutArray = try jsonDecoder.decode([Routines].self, from: savedRoutines)
             } catch {
                 print("Failed to load routines")
+                //(Failed to load since it is a first launch so add template workout
+                let templateWorkout = routineModel.templateWorkout()
+                workoutArray.append(templateWorkout)
             }
         }
         
         
         
-        let templateWorkout = routineModel.templateWorkout()
-        workoutArray.append(templateWorkout)
     }
     
     //MARK: - SAVE Methods
@@ -121,6 +119,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             mode = "edit"   //can potentially edit
             //TODO: Implement for multiple sets and different hiit types
             present(controller, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            workoutArray.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            save()
         }
     }
 

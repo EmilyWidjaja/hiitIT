@@ -28,25 +28,6 @@ class Routines: NSObject, Codable {
         self.setRestDuration = setRestDuration
     }
     
-    //read from disk
-    /*required init?(coder aDecoder: NSCoder) {
-        routineName = aDecoder.decodeObject(forKey: "routineName") as? String ?? ""
-        sets = aDecoder.decodeObject(forKey: "sets") as? Int ?? 0
-        exercises = aDecoder.decodeObject(forKey: "exercises") as? Int ?? 0
-        exerciseDuration = aDecoder.decodeObject(forKey: "exerciseDuration") as? Int ?? 0
-        exerciseRestDuration = aDecoder.decodeObject(forKey: "exerciseRestDuration") as? Int ?? 0
-        setRestDuration = aDecoder.decodeObject(forKey: "setRestDuration") as? Int ?? 0
-    }
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(routineName, forKey: "routineName")
-        aCoder.encode(sets, forKey: "sets")
-        aCoder.encode(exercises, forKey: "exercises")
-        aCoder.encode(exerciseDuration, forKey: "exerciseDuration")
-        aCoder.encode(exerciseRestDuration, forKey: "exerciseRestDuration")
-        aCoder.encode(setRestDuration, forKey: "setRestDuration")
-    }*/
-    
     //MARK: - Builds set and routines
     //assumes a basic exercise, TODO: Allow for more complex variations
     //build a set - TODO: allow for exericise name inputs
@@ -62,7 +43,7 @@ class Routines: NSObject, Codable {
                 set[restName] = exerciseRestDuration!
             }
         }
-        
+
         return set
     }
         
